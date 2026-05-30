@@ -1,0 +1,97 @@
+{
+  "kind": "collectionType",
+  "collectionName": "article_submissions",
+  "info": {
+    "singularName": "article-submission",
+    "pluralName": "article-submissions",
+    "displayName": "Article Submission",
+    "description": "User submitted articles waiting for admin approval"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "additionalImages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "reviewNotes": {
+      "type": "text",
+      "required": false
+    },
+    "submittedBy": {
+      "type": "string",
+      "required": true
+    },
+    "submittedByEmail": {
+      "type": "email",
+      "required": true
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "articleSubmissions"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "articleSubmissions"
+    },
+    "submittedAt": {
+      "type": "datetime",
+      "default": null
+    },
+    "reviewedAt": {
+      "type": "datetime",
+      "default": null
+    },
+    "reviewedBy": {
+      "type": "string",
+      "required": false
+    },
+    "publishedArticle": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article",
+      "mappedBy": "submission"
+    }
+  }
+}

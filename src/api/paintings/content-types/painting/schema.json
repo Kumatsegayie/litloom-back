@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "paintings",
+  "info": {
+    "singularName": "painting",
+    "pluralName": "paintings",
+    "displayName": "Painting",
+    "description": "Paintings used in the Paintings section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "artist": {
+      "type": "string"
+    },
+    "year": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Single media uploader that accepts multiple images. Use this field for all painting photos."
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "paintings"
+    },
+    "metaTitle": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "metaDescription": {
+      "type": "text",
+      "maxLength": 180
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "noIndex": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

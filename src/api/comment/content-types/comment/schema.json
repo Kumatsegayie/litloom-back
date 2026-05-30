@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comments",
+  "info": {
+    "singularName": "comment",
+    "pluralName": "comments",
+    "displayName": "Comment",
+    "description": "Moderated comments submitted from frontend pages"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "commenterName": {
+      "type": "string",
+      "required": true
+    },
+    "commenterEmail": {
+      "type": "email",
+      "required": true
+    },
+    "comment": {
+      "type": "text",
+      "required": true
+    },
+    "moderationStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "public",
+        "rejected"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "contentType": {
+      "type": "string",
+      "required": true
+    },
+    "contentId": {
+      "type": "string",
+      "required": true
+    },
+    "contentSlug": {
+      "type": "string"
+    },
+    "contentTitle": {
+      "type": "string"
+    },
+    "pageUrl": {
+      "type": "string"
+    },
+    "submittedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "reviewedAt": {
+      "type": "datetime"
+    },
+    "reviewedBy": {
+      "type": "string"
+    },
+    "adminNotes": {
+      "type": "text"
+    }
+  }
+}

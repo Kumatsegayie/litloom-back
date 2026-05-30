@@ -1,0 +1,128 @@
+{
+  "kind": "collectionType",
+  "collectionName": "submissions",
+  "info": {
+    "singularName": "submission",
+    "pluralName": "submissions",
+    "displayName": "Submission",
+    "description": "Public article and podcast submissions for admin review"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "submissionType": {
+      "type": "enumeration",
+      "enum": [
+        "article",
+        "podcast"
+      ],
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 220
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "excerpt": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "description": {
+      "type": "text"
+    },
+    "duration": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "category": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "tags": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "submitterName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "submitterEmail": {
+      "type": "email",
+      "required": true
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": false
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "galleryImages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "audioFile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "audios"
+      ]
+    },
+    "reviewNotes": {
+      "type": "text"
+    },
+    "submittedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "reviewedAt": {
+      "type": "datetime"
+    },
+    "reviewedBy": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "publishedCollection": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "publishedDocumentId": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}

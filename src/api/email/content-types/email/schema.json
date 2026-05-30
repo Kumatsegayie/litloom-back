@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "emails",
+  "info": {
+    "singularName": "email",
+    "pluralName": "emails",
+    "displayName": "Email",
+    "description": "Subscribed client emails"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "subscribedAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

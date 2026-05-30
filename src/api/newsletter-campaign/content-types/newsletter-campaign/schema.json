@@ -1,0 +1,109 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_campaigns",
+  "info": {
+    "singularName": "newsletter-campaign",
+    "pluralName": "newsletter-campaigns",
+    "displayName": "Newsletter Campaign",
+    "description": "Compose and send newsletter emails to subscribed users"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "subject": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "ctaLabel": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "ctaUrl": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "sendStatus": {
+      "type": "enumeration",
+      "enum": [
+        "draft",
+        "sending",
+        "sent",
+        "partial",
+        "failed"
+      ],
+      "default": "draft",
+      "required": true,
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "sentAt": {
+      "type": "datetime",
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "totalRecipients": {
+      "type": "integer",
+      "default": 0,
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "sentCount": {
+      "type": "integer",
+      "default": 0,
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "failedCount": {
+      "type": "integer",
+      "default": 0,
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "failureReport": {
+      "type": "json",
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    },
+    "lastError": {
+      "type": "text",
+      "pluginOptions": {
+        "content-manager": {
+          "visible": false
+        }
+      }
+    }
+  }
+}

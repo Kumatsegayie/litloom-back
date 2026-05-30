@@ -1,0 +1,84 @@
+{
+  "kind": "collectionType",
+  "collectionName": "podcasts",
+  "info": {
+    "singularName": "podcast",
+    "pluralName": "podcasts",
+    "displayName": "Podcast",
+    "description": "Individual podcast episodes; optionally linked to a Series"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "audio": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["audios"]
+    },
+    "embedUrl": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "duration": {
+      "type": "string"
+    },
+    "episodeNumber": {
+      "type": "integer"
+    },
+    "publishDate": {
+      "type": "datetime"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "uploader": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "series": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::series.series",
+      "inversedBy": "episodes"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "podcasts"
+    },
+    "metaTitle": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "metaDescription": {
+      "type": "text",
+      "maxLength": 180
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "noIndex": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

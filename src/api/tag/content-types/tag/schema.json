@@ -1,0 +1,90 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tags",
+  "info": {
+    "singularName": "tag",
+    "pluralName": "tags",
+    "displayName": "Tag",
+    "description": "Article tags for categorization"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 30
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 150
+    },
+    "color": {
+      "type": "string",
+      "default": "#6c757d",
+      "maxLength": 7
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::article.article",
+      "mappedBy": "tags"
+    },
+    "articleSubmissions": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::article-submission.article-submission",
+      "mappedBy": "tags"
+    },
+    "blogs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::blog.blog",
+      "mappedBy": "tags"
+    },
+    "poems": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::poem.poem",
+      "mappedBy": "tags"
+    },
+    "books": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::book.book",
+      "mappedBy": "tags"
+    },
+    "paintings": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::paintings.painting",
+      "mappedBy": "tags"
+    },
+    "photos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::photos.photo",
+      "mappedBy": "tags"
+    },
+    "podcasts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::podcast.podcast",
+      "mappedBy": "tags"
+    },
+    "serieses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::series.series",
+      "mappedBy": "tags"
+    }
+  }
+}

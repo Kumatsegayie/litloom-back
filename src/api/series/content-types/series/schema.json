@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "series",
+  "info": {
+    "singularName": "series",
+    "pluralName": "serieses",
+    "displayName": "Series",
+    "description": "A collection representing a podcast series (group of episodes)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "uploader": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "episodes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::podcast.podcast",
+      "mappedBy": "series"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "serieses"
+    },
+    "metaTitle": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "metaDescription": {
+      "type": "text",
+      "maxLength": 180
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "noIndex": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

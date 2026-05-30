@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categories",
+  "info": {
+    "singularName": "category",
+    "pluralName": "categories",
+    "displayName": "Category",
+    "description": "Article categories for organization"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 50
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 200
+    },
+    "color": {
+      "type": "string",
+      "default": "#007bff",
+      "maxLength": 7
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article.article",
+      "mappedBy": "category"
+    },
+    "articleSubmissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article-submission.article-submission",
+      "mappedBy": "category"
+    },
+    "blogs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog.blog",
+      "mappedBy": "category"
+    },
+    "poems": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::poem.poem",
+      "mappedBy": "category"
+    },
+    "books": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::book.book",
+      "mappedBy": "category"
+    }
+  }
+}
