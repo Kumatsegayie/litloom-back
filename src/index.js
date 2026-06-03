@@ -83,6 +83,26 @@ function uniqueActions(actions) {
   return [...new Set((actions || []).map((item) => String(item || '').trim()).filter(Boolean))];
 }
 
+function cleanEnv(value) {
+  return String(value || '').trim().replace(/^['"]|['"]$/g, '');
+}
+
+function getEmailDefaults() {
+  const defaultFrom =
+    cleanEnv(process.env.EMAIL_DEFAULT_FROM) ||
+    cleanEnv(process.env.SMTP_FROM) ||
+    `Litloom <${cleanEnv(process.env.SMTP_USER || process.env.ADMIN_EMAIL || 'litloom1@gmail.com')}>`;
+
+  const defaultReplyTo =
+    cleanEnv(process.env.EMAIL_DEFAULT_REPLY_TO) ||
+    cleanEnv(process.env.SMTP_REPLY_TO) ||
+    cleanEnv(process.env.ADMIN_EMAIL) ||
+    cleanEnv(process.env.SMTP_USER) ||
+    'litloom1@gmail.com';
+
+  return { defaultFrom, defaultReplyTo };
+}
+
 async function ensureRole(strapi, { type, name, description }) {
   const roleQuery = strapi.db.query('plugin::users-permissions.role');
   const existing = await roleQuery.findOne({ where: { type } });
@@ -228,7 +248,18 @@ async function startNewsletterWorker(strapi) {
 }
 
 module.exports = {
-  register() {},
+  register({ strapi }) {
+    const { defaultFrom, defaultReplyTo } = getEmailDefaults();
+
+    strapi.config.set('plugin.email', {
+      provider: 'strapi-provider-email-litloom-smtp',
+      providerOptions: {},
+      settings: {
+        defaultFrom,
+        defaultReplyTo
+      }
+    });
+  },
 
   async bootstrap({ strapi }) {
     try {
