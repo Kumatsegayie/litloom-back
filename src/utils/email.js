@@ -36,6 +36,16 @@ function cleanEnv(value) {
   return String(value || '').trim().replace(/^['"]|['"]$/g, '');
 }
 
+function formatFromHeader(value) {
+  const cleaned = cleanEnv(value);
+  if (!cleaned) return '';
+  if (/<[^>]+>/.test(cleaned)) return sanitizeHeader(cleaned);
+
+  const mailbox = extractMailbox(cleaned);
+  if (!mailbox) return '';
+  return `"Litloom" <${mailbox}>`;
+}
+
 function buildSmtpConfig() {
   const host = cleanEnv(process.env.SMTP_HOST);
   const port = Number(process.env.SMTP_PORT || 0);
@@ -73,11 +83,23 @@ function buildSmtpConfig() {
 
 function getFromAddress() {
   return (
-    cleanEnv(process.env.EMAIL_DEFAULT_FROM) ||
-    cleanEnv(process.env.SMTP_FROM) ||
-    cleanEnv(process.env.SMTP_USER) ||
-    'no-reply@litloom.local'
+    formatFromHeader(process.env.EMAIL_DEFAULT_FROM) ||
+    formatFromHeader(process.env.SMTP_FROM) ||
+    formatFromHeader(process.env.SMTP_USER) ||
+    '"Litloom" <litloom1@gmail.com>'
   );
+}
+
+function getReplyToAddress(fromHeader) {
+  const explicitReplyTo =
+    cleanEnv(process.env.EMAIL_DEFAULT_REPLY_TO) ||
+    cleanEnv(process.env.SMTP_REPLY_TO) ||
+    cleanEnv(process.env.ADMIN_EMAIL);
+
+  if (explicitReplyTo) return sanitizeHeader(explicitReplyTo);
+
+  const fallbackMailbox = extractMailbox(fromHeader || getFromAddress());
+  return fallbackMailbox ? sanitizeHeader(fallbackMailbox) : '';
 }
 
 function encodeBase64(value) {
@@ -243,7 +265,7 @@ async function sendViaSmtp({ to, subject, text, html, replyTo, from }) {
   const { config: smtp, reason } = buildSmtpConfig();
   if (!smtp) throw new Error(reason || 'SMTP not configured');
 
-  const fromHeader = sanitizeHeader(from || getFromAddress());
+  const fromHeader = sanitizeHeader(formatFromHeader(from || getFromAddress()) || getFromAddress());
   const fromMailbox = extractMailbox(fromHeader);
   if (!fromMailbox) throw new Error('SMTP_FROM is invalid');
 
@@ -253,7 +275,7 @@ async function sendViaSmtp({ to, subject, text, html, replyTo, from }) {
   if (toMailbox.length === 0) throw new Error('No valid recipient mailbox');
 
   const safeSubject = sanitizeHeader(subject || '');
-  const safeReplyTo = sanitizeHeader(replyTo || process.env.EMAIL_DEFAULT_REPLY_TO || fromHeader);
+  const safeReplyTo = sanitizeHeader(replyTo || getReplyToAddress(fromHeader));
   const toHeader = recipients.map(sanitizeHeader).join(', ');
   const bodyText = String(text || '');
   const bodyHtml = html ? String(html) : '';
@@ -329,11 +351,11 @@ async function sendViaStrapiPlugin({ strapi, to, subject, text, html, replyTo, f
 
   await strapi.plugin('email').service('email').send({
     to: recipients.join(','),
-    from: from || getFromAddress(),
+    from: formatFromHeader(from || getFromAddress()) || getFromAddress(),
     subject,
     text,
     html,
-    replyTo: replyTo || process.env.EMAIL_DEFAULT_REPLY_TO || getFromAddress()
+    replyTo: replyTo || getReplyToAddress(from || getFromAddress())
   });
   return { provider: 'strapi-email-plugin' };
 }
@@ -461,8 +483,6 @@ async function sendEmailDirectSmtp({ strapi, to, subject, text, html, replyTo, f
 function shouldUsePluginPath(strapi) {
   if (parseBool(process.env.EMAIL_FORCE_DIRECT_SMTP, false)) return false;
   if (!strapi?.plugin || !strapi.plugin('email')) return false;
-  const providerName = getProviderName(strapi);
-  if (providerName === CUSTOM_SMTP_PROVIDER) return false;
   return true;
 }
 
