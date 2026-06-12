@@ -99,6 +99,9 @@ module.exports = createCoreController(COMMENT_UID, ({ strapi }) => ({
       }
 
       // Notify admins by email about a new pending comment.
+      let adminNotifyRecipients = [];
+      let adminNotifyProvider = '';
+      let adminNotifyError = '';
       try {
         const notifyListRaw = [
           ADMIN_FALLBACK_EMAIL,
@@ -113,6 +116,7 @@ module.exports = createCoreController(COMMENT_UID, ({ strapi }) => ({
             .map((entry) => entry.trim())
             .filter(Boolean)
         )];
+        adminNotifyRecipients = to;
 
         const subject = `New pending comment on ${contentTitle || contentType}`;
         const textLines = [
@@ -140,11 +144,13 @@ module.exports = createCoreController(COMMENT_UID, ({ strapi }) => ({
             subject,
             text: textLines.join('\n')
           });
+          adminNotifyProvider = mailResult?.provider || '';
           strapi.log.info(
             `[comments] Admin notification sent via ${mailResult?.provider || 'unknown'} to ${to.join(', ')}`
           );
         }
       } catch (mailErr) {
+        adminNotifyError = mailErr?.message || 'unknown error';
         strapi.log.error(
           `[comments] Failed to notify admins: ${mailErr?.message || 'unknown error'}`,
           mailErr
@@ -153,6 +159,13 @@ module.exports = createCoreController(COMMENT_UID, ({ strapi }) => ({
 
       ctx.send({
         message: 'Comment submitted successfully and is pending moderation.',
+        mailDebug: {
+          attempted: adminNotifyRecipients.length > 0,
+          recipients: adminNotifyRecipients,
+          provider: adminNotifyProvider || null,
+          failed: Boolean(adminNotifyError),
+          error: adminNotifyError || null
+        },
         data: {
           id: created?.id || created?.documentId || null,
           moderationStatus: 'pending',
